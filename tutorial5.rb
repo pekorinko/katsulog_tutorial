@@ -1,3 +1,5 @@
+#スクロール無しで6個目の口コミまでスクロール出来た↓
+
 
 require 'selenium-webdriver'
 
