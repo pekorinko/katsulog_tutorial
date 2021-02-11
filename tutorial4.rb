@@ -19,8 +19,6 @@ d.get('https://www.google.com/search?q=%E3%82%A2%E3%83%B3%E3%82%A2%E3%83%9F+%E5%
 
 sleep 3
 #指定したxpathまでスクロールするように挙動させたい
-d.find_element(:xpath, '//*[@id="reviewSort"]/div/div[2]/div[2]/div[1]/div[3]/div[2]/span').text#.location_once_scrolled_into_view
-
-
+puts d.find_element(:xpath, '//*[@id="reviewSort"]/div/div[2]/div[2]/div[1]/div[3]/div[2]/span').text
 
 sleep 3
