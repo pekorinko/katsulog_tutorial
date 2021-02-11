@@ -21,4 +21,5 @@ sleep 3
 #指定したxpathまでスクロールするように挙動させたい
 d.find_element(:xpath, '//*[@id="reviewSort"]/div/div[2]/div[2]/div[1]/div[3]/div[2]/span').text#.location_once_scrolled_into_view
 
+
 sleep 3
