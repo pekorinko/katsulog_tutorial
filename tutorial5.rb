@@ -1,4 +1,5 @@
-#スクロール無しで6個目の口コミまでスクロール出来た↓
+#スクロール無しで6個目の口コミまでスクロール出来た
+#参考　https://teratail.com/questions/234189
 
 
 require 'selenium-webdriver'
