@@ -1,3 +1,5 @@
+#アンアミの一番上の口コミを取得する
+
 #reviewSort > div > div.gws-localreviews__general-reviews-block > div:nth-child(1) > div.jxjCjc > div:nth-child(4) > div.Jtu6Td > span
 
 require 'selenium-webdriver'

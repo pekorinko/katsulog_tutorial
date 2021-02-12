@@ -1,4 +1,5 @@
 # #tutorial3.rbとは異なる口コミを抜き出す
+
 # require 'selenium-webdriver'
 
 # d = Selenium::WebDriver.for :chrome
