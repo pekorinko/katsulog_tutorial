@@ -1,3 +1,4 @@
+#LinoのURLでは口コミページ表示されないけどアンアミなら口コミのページが表示される
 require 'selenium-webdriver'
 
 d = Selenium::WebDriver.for :chrome
