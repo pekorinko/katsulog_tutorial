@@ -17,7 +17,7 @@ index = 0
 before_height = d.execute_script("return document.body.scrollHeight")
 
 while index < 10 do
-
+    
     #だめなところ
     #-スクロールしなくても最初の６件は取れていたのに、このプログラムだとはじめからスクロールしてしまっている
     #-取れなくなったらスクロールするように書き換える
