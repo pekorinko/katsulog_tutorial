@@ -16,20 +16,28 @@ wait.until  {d.find_element(:xpath, '//*[@id="reviewSort"]/div/div[2]/div[2]/div
 review_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 puts review_height
 sleep 3
-d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,3000)')
+d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,10000)')
 sleep 3
 review_height2 = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 puts review_height2
+d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,20000)')
+sleep 10
+review_height3 = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
+puts review_height3
 
 index = 0
 
 while index < 20 do
     index = index + 1
     puts "index = #{index}"
-    wait.until  {d.find_element(:xpath, "//*[@id='reviewSort']/div/div[2]/div[#{index}]/div[1]/div[3]/div[2]/span").displayed?}
+    wait.until  {
+        #d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,10000)')
+        d.find_element(:xpath, "//*[@id='reviewSort']/div/div[2]/div[#{index}]/div[1]/div[3]/div[2]/span").displayed?
+    }
     #指定したxpathまでスクロールするように挙動させたい
     puts d.find_element(:xpath, "//*[@id='reviewSort']/div/div[2]/div[#{index}]/div[1]/div[3]/div[2]/span").text
     puts "============================"
     sleep 2
 end
+
 sleep 3
