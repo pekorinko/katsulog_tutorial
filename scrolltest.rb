@@ -16,13 +16,16 @@ sleep 3
 review_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 puts review_height
 
-sleep 3
+sleep 10
 #口コミ一覧画面の先頭から3000の高さ（Y軸）までスクロール
 #Element.scrollHeight は読み取り専用のプロパティで、あふれて画面上に表示されない部分を含めた、要素の中身の幅の寸法
 d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,3000)')
+sleep 3
+d.execute_script('document.getElementsByClassName("review-dialog-list")[0].scrollTo(0,5000)')
 sleep 3
 
 review_height2 = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 puts review_height2
 
-sleep 30
+
+sleep 10
