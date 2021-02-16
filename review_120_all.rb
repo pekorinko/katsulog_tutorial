@@ -63,7 +63,6 @@ review_height3 = d.execute_script('return document.getElementsByClassName("revie
 puts review_height3
 #============================================
 
-review_total 
 elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
 elements.each.with_index(1) do |element, index|
     puts "-----#{index}番目-----"
