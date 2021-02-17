@@ -14,49 +14,25 @@ current_height = d.execute_script('return document.getElementsByClassName("revie
 elements = []
 
 while true do
-    #スクロールによって読み込まれた口コミを見る★　見る＝口コミを変数に入れる
+    #口コミを変数に入れる
     #'gws-localreviews__google-review' 口コミ１件の全体
     elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
-    # elements.each.with_index(1) do |element, index|
-    #     review_item = element.find_element(:class_name, 'Jtu6Td')
-    # elementsに入っている口コミの件数が２０件より多いか判断する
-    #多かったらループを抜ける
+    #elementsに入っている口コミの件数が30件以上であればループを抜ける
     if elements.length >= 30
         break
     end
-    #少なかったらelementsに口コミをもっと追加してほしい→そのためにスクロールもっとしてほしい
-    #↑結論、少なかったらもっとスクロールしてほしい
+    #elementsに入っている口コミの件数が30件未満であれば、更に今表示されている画面の一番下までスクロール
     d.execute_script("document.getElementsByClassName('review-dialog-list')[0].scrollTo(0,#{current_height})")
     sleep 5
     current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
-    # end
-    #読み込まれた口コミの一番最後の口コミを読んだらスクロールする★
-
-    
-    #↓スクロールする
-    
-    
-
     sleep 5
 end
 
 puts elements.length
-#人間がブラウザ開く
-#初期表示分の口コミを見る
-#初期表示分の一番最後の口コミを見たらスクロールする
-#スクロールによって読み込まれた口コミを見る★
-#読み込まれた口コミの一番最後の口コミを読んだらスクロールする★
-#スクロールによって読み込まれた口コミを見る
-#読み込まれた口コミの一番最後の口コミを読んだらスクロールする
-#スクロールによって読み込まれた口コミを見る
-#読み込まれた口コミの一番最後の口コミを読んだらスクロールする
 
-#'gws-localreviews__google-review' 口コミ１件の全体
-# elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
 elements.each.with_index(1) do |element, index|
     puts "-----#{index}番目-----"
-    #puts element.text
-    #:class_name, 'Jtu6Td'→口コミ文章部分 「ローカルガイド · 40 件のレビュー · 297 枚の写真」部分はとは別のクラス（別のdivで囲われている）
+    #:class_name, 'Jtu6Td'→口コミ文章部分 
     review_item = element.find_element(:class_name, 'Jtu6Td')
     local_guide = element.find_element(:class_name, 'FGlxyd')
     begin
