@@ -1,6 +1,22 @@
 require 'selenium-webdriver'
 require 'pry'
 
+class Review
+    #口コミの文章部分を @review_text に代入する
+    def initialize(text, count)
+        @text = text
+        @count = count
+    end
+    #@review_text に代入された口コミの文章部分を返す
+    def text
+        @text
+    end
+    def count
+        @count
+    end
+
+end
+
 d = Selenium::WebDriver.for :chrome
 
 wait = Selenium::WebDriver::Wait.new(timeout: 100)
@@ -18,7 +34,7 @@ while true do
     #'gws-localreviews__google-review' 口コミ１件の全体
     elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
     #elementsに入っている口コミの件数が30件以上であればループを抜ける
-    if elements.length >= 100
+    if elements.length >= 30
         break
     end
     #elementsに入っている口コミの件数が30件未満であれば、更に今表示されている画面の一番下までスクロール
@@ -30,8 +46,9 @@ end
 
 puts elements.length
 
-elements.each.with_index(1) do |element, index|
-    puts "-----#{index}番目-----"
+reviews = []
+
+elements.each do |element|
     #:class_name, 'Jtu6Td'→口コミ文章部分 
     review_item = element.find_element(:class_name, 'Jtu6Td')
     local_guide = element.find_element(:class_name, 'FGlxyd')
@@ -42,13 +59,22 @@ elements.each.with_index(1) do |element, index|
         sleep 0.5
         content = review_item.find_element(:class_name, 'review-full-text')
         local_guide_info = local_guide.find_element(:class_name, 'A503be')
-        puts local_guide_info.text
-        puts content.text
+        review = Review.new(content.text,999)
+        reviews.push(review)
+        # puts local_guide_info.text
+        # puts content.text
       rescue StandardError
         # review-full-text がなかったら、最後のspan要素を出力する
         content = review_item.find_elements(:tag_name, 'span').last
         local_guide_info = local_guide.find_element(:class_name, 'A503be')
-        puts local_guide_info.text
-        puts content.text
+        review = Review.new(content.text,999)
+        reviews.push(review)
+        # puts local_guide_info.text
+        # puts content.text
       end
+end
+
+reviews.each.with_index(1) do |review,index|
+    puts "-----#{index}番目-----"
+    puts review.text
 end
