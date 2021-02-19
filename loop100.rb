@@ -77,4 +77,5 @@ end
 reviews.each.with_index(1) do |review,index|
     puts "-----#{index}番目-----"
     puts review.text
+    puts review.count
 end
