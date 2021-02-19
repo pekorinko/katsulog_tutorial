@@ -15,10 +15,9 @@ class Review
 end
 
 content = "良かった"
-# local_guide = "ローカルガイド · 26 件のレビュー · 32 枚の写真".match(/ローカルガイド · /)
+local_guide = "ローカルガイド · 26 件のレビュー · 32 枚の写真".gsub(//)
 # p local_guide.post_match
-local_guide = "ローカルガイド · 26 件のレビュー · 32 枚の写真".match(/件のレビュー/)
-p $`
+
 
 review1 = Review.new(content,local_guide)
 review2 = Review.new(content,local_guide)
