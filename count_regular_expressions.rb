@@ -15,8 +15,12 @@ class Review
 end
 
 content = "良かった"
-local_guide = "ローカルガイド · 26 件のレビュー · 32 枚の写真".gsub(//)
-# p local_guide.post_match
+#Rubyの文字列はStringクラスのインスタンス→Stringクラスにはmatchメソッドがある
+#matchは配列のように扱える、26だけを取り出すためにキャプチャ()を使った
+#正規表現試行錯誤の記録 https://discord.com/channels/790571394197880892/808679194003111956/812868078174076938
+local_guide = "1ローカルガイド · 216 件のレビュー · 32 枚の写真".match(/(\d+)\ 件のレビュー/)[1].to_i#.to_s.to_i
+p local_guide
+
 
 
 review1 = Review.new(content,local_guide)

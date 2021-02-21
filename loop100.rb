@@ -59,7 +59,7 @@ elements.each do |element|
         sleep 0.5
         content = review_item.find_element(:class_name, 'review-full-text')
         local_guide_info = local_guide.find_element(:class_name, 'A503be')
-        review = Review.new(content.text,999)
+        review = Review.new(content.text,local_guide_info.text)
         reviews.push(review)
         # puts local_guide_info.text
         # puts content.text
@@ -67,7 +67,7 @@ elements.each do |element|
         # review-full-text がなかったら、最後のspan要素を出力する
         content = review_item.find_elements(:tag_name, 'span').last
         local_guide_info = local_guide.find_element(:class_name, 'A503be')
-        review = Review.new(content.text,999)
+        review = Review.new(content.text,local_guide_info.text)
         reviews.push(review)
         # puts local_guide_info.text
         # puts content.text
