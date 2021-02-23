@@ -17,5 +17,9 @@ wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 # document.getElementsByClassName("PuaHbe")[3].getElementsByClassName("Fam1ne")[0].getAttribute('aria-label')
 # "5 点中 4.0 点の評価、"が返ってくる
 star = d.find_elements(:class_name,"PuaHbe")[3].find_elements(:class_name,"Fam1ne")[0].attribute('aria-label')
+# filter_star = star.scan(/\d+/)[1].to_i
+#星の点数部分のみ小数点以下含めて取得
+filter_star = star.scan(/\d+\.\d+?/)[0].to_f
 
 p star
+p filter_star
