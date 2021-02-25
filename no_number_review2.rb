@@ -35,7 +35,7 @@ wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 #スクロールをループで書く
 current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 elements = []
-elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
+elements = d.find_elements(:css, '.gws-localreviews__google-review.WMbnJf')
 # while true do
 #     #口コミを変数に入れる
 #     #'gws-localreviews__google-review' 口コミ１件の全体
