@@ -1,6 +1,3 @@
-#ローカルガイドじゃない口コミで星評価しか無い投稿（平塚の美容院）
-#before:class名で口コミ部分を指定→after:CSSセレクタで口コミ部分を指定
-
 require 'selenium-webdriver'
 require 'pry'
 
@@ -26,32 +23,31 @@ end
 
 d = Selenium::WebDriver.for :chrome
 
-wait = Selenium::WebDriver::Wait.new(timeout: 100)
+wait = Selenium::WebDriver::Wait.new(timeout: 30)
 
+# d.get('https://www.google.com/search?rlz=1C5CHFA_enJP939JP939&sxsrf=ALeKk03piFZiTXDS_S-GwnYVa4JmAemjuA%3A1613137898660&ei=6ocmYKfoJ4H3hwPrv4WYBg&q=%E6%B9%AF%E6%A5%BD%E3%81%AE%E9%87%8C%E3%80%80%E5%9B%BD%E7%AB%8B&oq=%E6%B9%AF%E6%A5%BD%E3%81%AE%E9%87%8C%E3%80%80%E5%9B%BD%E7%AB%8B&gs_lcp=Cgdnd3Mtd2l6EAMyBAgjECcyBAgjECcyAggAMgIIADICCAAyAggAMgIIADICCAA6BwgjELADECc6BwgAEEcQsAM6CAgAELEDEIMBOgQIABAEOgQIABAeOgYIABAIEB5QjhtYmSdg3CloAXACeACAAegBiAGdD5IBBTAuOC4zmAEAoAEBqgEHZ3dzLXdpesgBCsABAQ&sclient=gws-wiz&ved=0ahUKEwinhbH7vuTuAhWB-2EKHetfAWMQ4dUDCA0&uact=5#lrd=0x6018e3951c8fde6f:0x429b84dcae3b48f6,1,,,')
 d.get('https://www.google.com/search?rlz=1C5CHFA_enJP939JP939&biw=1080&bih=574&tbm=lcl&ei=NVk3YJ-JD4GvoASZtoy4DA&q=%E5%B9%B3%E5%A1%9A%E3%80%80%E7%BE%8E%E5%AE%B9%E9%99%A2&oq=%E5%B9%B3%E5%A1%9A%E3%80%80%E7%BE%8E%E5%AE%B9%E9%99%A2&gs_l=psy-ab.3..0i7i30k1l8.87128.89315.0.89847.12.12.0.0.0.0.182.1378.3j8.11.0....0...1c.1j4.64.psy-ab..6.5.710...0j0i67k1j0i7i4i30k1.0.m96OrDiFWGs#lrd=0x6019acd8a79c5fb5:0x99f75ae1b56fbb69,1,,,&rlfi=hd:;si:11094436132508646249,l,ChLlubPloZrjgIDnvo7lrrnpmaJaIwoK576O5a65IOmZoiIR5bmz5aGaIOe-juWuuSDpmaIqAggDkgEKaGFpcl9zYWxvbqoBEhABKg4iCue-juWuuSDpmaIoCA;mv:[[35.3525839,139.3576149],[35.3243199,139.31230779999999]];start:20')
-
 #口コミページが表示されるまで待つ
 wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 
 #スクロールをループで書く
 current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 elements = []
-#↓CSSセレクタで口コミ部分を指定
-elements = d.find_elements(:css, '.gws-localreviews__google-review.WMbnJf')
-# while true do
-#     #口コミを変数に入れる
-#     #'gws-localreviews__google-review' 口コミ１件の全体
-#     elements = d.find_elements(:class_name, 'gws-localreviews__google-review')
-#     #elementsに入っている口コミの件数が30件以上であればループを抜ける
-#     if elements.length >= 30
-#         break
-#     end
-#     #elementsに入っている口コミの件数が30件未満であれば、更に今表示されている画面の一番下までスクロール
-#     d.execute_script("document.getElementsByClassName('review-dialog-list')[0].scrollTo(0,#{current_height})")
-#     sleep 5
-#     current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
-#     sleep 5
-# end
+
+while true do
+    #口コミを変数に入れる
+    #'gws-localreviews__google-review' 口コミ１件の全体
+    elements = d.find_elements(:css, '.gws-localreviews__google-review.WMbnJf')
+    #elementsに入っている口コミの件数が30件以上であればループを抜ける
+    if elements.length >= 1
+        break
+    end
+    #elementsに入っている口コミの件数が30件未満であれば、更に今表示されている画面の一番下までスクロール
+    d.execute_script("document.getElementsByClassName('review-dialog-list')[0].scrollTo(0,#{current_height})")
+    sleep 5
+    current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
+    sleep 5
+end
 
 puts elements.length
 
@@ -72,20 +68,21 @@ elements.each do |element|
         review_item.find_element(:class_name, 'review-more-link').click
         sleep 0.5
         content = review_item.find_element(:class_name, 'review-full-text')
-        # local_guide_info = local_guide.find_element(:class_name, 'A503be')
         
-
-        review = Review.new(content.text, local_guide.text.scan(/(\d+)\ 件のレビュー/)[0].to_i, star_score)
+        local_guide_info = local_guide.find_elements(:class_name, 'A503be')
+        
+        review = Review.new(content.text,local_guide_info.text.match(/(\d+)\ 件のレビュー/)[0].to_i, star_score)
+        # review = Review.new(content.text,local_guide.text.scan(/(\d+)\ 件のレビュー/)[0].to_s.to_i, star_score)
         reviews.push(review)
         # puts local_guide_info.text
         # puts content.text
       rescue StandardError
         # review-full-text がなかったら、最後のspan要素を出力する
         content = review_item.find_elements(:tag_name, 'span').last
-        # local_guide_info = local_guide.find_element(:class_name, 'A503be')
-        
+        local_guide_info = local_guide.find_element(:class_name, 'A503be')
 
-        review = Review.new(content.text, local_guide.text.scan(/(\d+)\ 件のレビュー/)[0].to_i, star_score)
+        review = Review.new(content.text,local_guide_info.text.match(/(\d+)\ 件のレビュー/)[0].to_i, star_score)
+        # review = Review.new(content.text,local_guide.text.scan(/(\d+)\ 件のレビュー/)[0].to_s.to_i, star_score)
         reviews.push(review)
         # puts local_guide_info.text
         # puts content.text
