@@ -19,11 +19,22 @@ end
 
 class Review
     attr_reader :text, :count, :star
-    
+
     def initialize(text, count, star)
         @text = text
         @count = count
         @star = star
+    end
+
+end
+
+
+class Place
+    attr_reader :place_name, :address
+    
+    def initialize(place_name, address)
+        @place_name = place_name
+        @address = address
     end
 
 end
@@ -38,65 +49,7 @@ d.get('https://www.google.com/search?rlz=1C5CHFA_enJP939JP939&tbs=lf:1,lf_ui:2&t
 
 wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 
-#スクロールをループで書く
-current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
-elements = []
-
-while true do
-    elements = d.find_elements(:css, '.gws-localreviews__google-review.WMbnJf')
-    if elements.length >= 1
-        break
-    end
-    d.execute_script("document.getElementsByClassName('review-dialog-list')[0].scrollTo(0,#{current_height})")
-    sleep 5
-    current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
-    sleep 5
-end
-
-puts elements.length
-
-reviews = []
-
-elements.each do |element|
-    review_item = element.find_element(:class_name, 'Jtu6Td')
-    local_guide = element.find_element(:class_name, 'FGlxyd')
-    star_score = element.find_element(:class_name,"PuaHbe").find_element(:class_name,"Fam1ne").attribute('aria-label').scan(/\d+\.\d+?/)[0].to_f
-    
-    # p star_score
-
-    begin
-        # まず、 review-full-text というクラス名の要素を持つ（= もっと見るが表示されている）
-        # という前提で進める
-        review_item.find_element(:class_name, 'review-more-link').click
-        sleep 0.5
-        content = review_item.find_element(:class_name, 'review-full-text')
-        review_count = get_review_count(local_guide)
-
-        review = Review.new(content.text, review_count, star_score)
-
-        reviews.push(review)
-        
-    rescue StandardError
-        content = review_item.find_elements(:tag_name, 'span').last
-        review_count = get_review_count(local_guide)
-
-        review = Review.new(content.text, review_count, star_score)
-
-        reviews.push(review)
-      end
-    
-    #begin rescueをメソッド化するためのイメージ↓
-    #   review_text = get_review_text(review_item)
-    #   review_count = get_review_count(local_guide)
-
-    #   review = Review.new(review_text, review_count, star_score)
-
-    #   reviews.push(review)
-end
-
-reviews.each.with_index(1) do |review,index|
-    puts "-----#{index}番目-----"
-    puts review.text
-    puts review.count
-    puts review.star
-end
+place_name = d.find_element(:class_name, 'P5Bobd')
+address = d.find_element(:class_name, 'T6pBCe')
+puts place_name.text
+puts address.text
