@@ -49,7 +49,14 @@ d.get('https://www.google.com/search?rlz=1C5CHFA_enJP939JP939&tbs=lf:1,lf_ui:2&t
 
 wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 
-place_name = d.find_element(:class_name, 'P5Bobd')
-address = d.find_element(:class_name, 'T6pBCe')
-puts place_name.text
-puts address.text
+# place_name = d.find_element(:class_name, 'P5Bobd')
+# address = d.find_element(:class_name, 'T6pBCe')
+# puts place_name.text
+# puts address.text
+
+shop = d.find_element(:class_name,'VUGnzb')
+shop_name = shop.find_element(:class_name, 'P5Bobd').text
+address = shop.find_element(:class_name, 'T6pBCe').text
+place = Place.new(shop_name, address)
+puts place.place_name
+puts place.address

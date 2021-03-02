@@ -1,5 +1,3 @@
-#湯楽の里でもローカルガイドではない投稿のみのページでも意図したとおりに挙動する
-
 require 'selenium-webdriver'
 require 'pry'
 
@@ -18,21 +16,23 @@ def get_review_count(local_guide)
 end
 
 class Review
-    #口コミの文章部分を @review_text に代入する
+    attr_reader :text, :count, :star
+
     def initialize(text, count, star)
         @text = text
         @count = count
         @star = star
     end
-    #@review_text に代入された口コミの文章部分を返す
-    def text
-        @text
-    end
-    def count
-        @count
-    end
-    def star
-        @star
+
+end
+
+
+class Place
+    attr_reader :place_name, :address
+    
+    def initialize(place_name, address)
+        @place_name = place_name
+        @address = address
     end
 
 end
@@ -51,6 +51,8 @@ wait.until { d.find_element(:class_name, 'lcorif').displayed? }
 current_height = d.execute_script('return document.getElementsByClassName("review-dialog-list")[0].scrollHeight')
 elements = []
 
+
+
 while true do
     elements = d.find_elements(:css, '.gws-localreviews__google-review.WMbnJf')
     if elements.length >= 1
@@ -66,12 +68,12 @@ puts elements.length
 
 reviews = []
 
+
+
 elements.each do |element|
     review_item = element.find_element(:class_name, 'Jtu6Td')
     local_guide = element.find_element(:class_name, 'FGlxyd')
     star_score = element.find_element(:class_name,"PuaHbe").find_element(:class_name,"Fam1ne").attribute('aria-label').scan(/\d+\.\d+?/)[0].to_f
-    
-    # p star_score
 
     begin
         # まず、 review-full-text というクラス名の要素を持つ（= もっと見るが表示されている）
@@ -93,16 +95,14 @@ elements.each do |element|
 
         reviews.push(review)
       end
-    
-    #begin rescueをメソッド化するためのイメージ↓
-    #   review_text = get_review_text(review_item)
-    #   review_count = get_review_count(local_guide)
-
-    #   review = Review.new(review_text, review_count, star_score)
-
-    #   reviews.push(review)
 end
 
+shop = d.find_element(:class_name,'VUGnzb')
+shop_name = shop.find_element(:class_name, 'P5Bobd').text
+address = shop.find_element(:class_name, 'T6pBCe').text
+place = Place.new(shop_name, address)
+puts place.place_name
+puts place.address
 
 reviews.each.with_index(1) do |review,index|
     puts "-----#{index}番目-----"
